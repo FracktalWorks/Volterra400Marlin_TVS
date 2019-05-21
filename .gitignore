@@ -181,3 +181,11 @@ cmake-build-*
 
 #Python
 __pycache__
+
+# Fracktal Works
+bkp/
+Marlin/_Version.h
+Marlin/_Variant.h
+
+# Hide unused configs
+config/
