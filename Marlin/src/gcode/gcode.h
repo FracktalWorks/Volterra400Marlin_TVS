@@ -656,6 +656,13 @@ private:
     static void M261();
   #endif
 
+  /* FRACKTAL WORKS: START */
+  // Automatic hotend Z-offset calculation
+  #if HAS_BED_PROBE && HOTENDS > 1
+    static void M272();
+  #endif
+  /* FRACKTAL WORKS: END */
+
   #if HAS_SERVOS
     static void M280();
     #if ENABLED(EDITABLE_SERVO_ANGLES)

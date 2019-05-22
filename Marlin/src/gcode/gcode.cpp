@@ -581,6 +581,13 @@ void GcodeSuite::process_parsed_command(
         case 261: M261(); break;                                  // M261: Request data from an i2c slave
       #endif
 
+      /* FRACKTAL WORKS: START */
+      // Automatic hotend Z-offset calculation
+      #if HAS_BED_PROBE && HOTENDS > 1
+        case 272: M272(); break;                                  // M272: Automatic hotend Z-offset calculation
+      #endif
+      /* FRACKTAL WORKS: END */
+
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         case 302: M302(); break;                                  // M302: Allow cold extrudes (set the minimum extrude temperature)
       #endif
