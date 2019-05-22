@@ -33,6 +33,42 @@
  */
 #define CONFIGURATION_ADV_H_VERSION 020000
 
+//===========================================================================
+//======================= Fracktal Works Volterra 2019 ======================
+//===========================================================================
+
+#include "_FracktalWorks.h"
+
+#define HOME_Y_BEFORE_X
+
+#define DEFAULT_STEPPER_DEACTIVE_TIME 0
+#define MINIMUM_STEPPER_DIR_DELAY     650
+#define MINIMUM_STEPPER_PULSE         4
+#define DIGIPOT_I2C_MOTOR_CURRENTS    { 1.4, 1.4, 1.4, 1.4, 1.4 }
+
+#define THERMAL_PROTECTION_PERIOD       80     // Seconds
+#define THERMAL_PROTECTION_HYSTERESIS   15     // Degrees Celsius
+#define WATCH_TEMP_PERIOD               120    // Seconds
+
+#if ENABLED(THERMAL_PROTECTION_BED)
+  #define THERMAL_PROTECTION_BED_PERIOD       40 // Seconds
+  #define THERMAL_PROTECTION_BED_HYSTERESIS   15 // Degrees Celsius
+  #define WATCH_BED_TEMP_PERIOD               100 // Seconds
+#endif
+
+#define BABYSTEPPING
+
+#if ENABLED(BABYSTEPPING) || ENABLED(FW_BABYSTEP)
+  #define FW_BABYSTEP_LIMIT 1.0
+#endif
+
+
+// #define LIN_ADVANCE
+
+//===========================================================================
+//===================== End of Fracktal Works Julia 2018 ====================
+//===========================================================================
+
 // @section temperature
 
 //===========================================================================
@@ -137,8 +173,8 @@
  * THERMAL_PROTECTION_HYSTERESIS and/or THERMAL_PROTECTION_PERIOD
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
-  #define THERMAL_PROTECTION_PERIOD 50        // Seconds
-  #define THERMAL_PROTECTION_HYSTERESIS 6     // Degrees Celsius
+  // #define THERMAL_PROTECTION_PERIOD 50        // Seconds
+  // #define THERMAL_PROTECTION_HYSTERESIS 6     // Degrees Celsius
 
   //#define ADAPTIVE_FAN_SLOWING              // Slow part cooling fan if temperature drops
   #if BOTH(ADAPTIVE_FAN_SLOWING, PIDTEMP)
@@ -157,7 +193,7 @@
    * and/or decrease WATCH_TEMP_INCREASE. WATCH_TEMP_INCREASE should not be set
    * below 2.
    */
-  #define WATCH_TEMP_PERIOD 40                // Seconds
+  // #define WATCH_TEMP_PERIOD 40                // Seconds
   #define WATCH_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -165,13 +201,13 @@
  * Thermal Protection parameters for the bed are just as above for hotends.
  */
 #if ENABLED(THERMAL_PROTECTION_BED)
-  #define THERMAL_PROTECTION_BED_PERIOD 110    // Seconds
-  #define THERMAL_PROTECTION_BED_HYSTERESIS 4 // Degrees Celsius
+  // #define THERMAL_PROTECTION_BED_PERIOD 110    // Seconds
+  // #define THERMAL_PROTECTION_BED_HYSTERESIS 4 // Degrees Celsius
 
   /**
    * As described above, except for the bed (M140/M190/M303).
    */
-  #define WATCH_BED_TEMP_PERIOD 100                // Seconds
+  // #define WATCH_BED_TEMP_PERIOD 100                // Seconds
   #define WATCH_BED_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -560,7 +596,7 @@
 // Default stepper release if idle. Set to 0 to deactivate.
 // Steppers will shut down DEFAULT_STEPPER_DEACTIVE_TIME seconds after the last move when DISABLE_INACTIVE_? is true.
 // Time can be set by M18 and M84.
-#define DEFAULT_STEPPER_DEACTIVE_TIME 120
+// #define DEFAULT_STEPPER_DEACTIVE_TIME 120
 #define DISABLE_INACTIVE_X true
 #define DISABLE_INACTIVE_Y true
 #define DISABLE_INACTIVE_Z true  // set to false if the nozzle will fall down on your printed part when print has finished.
@@ -753,7 +789,7 @@
 #define DIGIPOT_I2C_NUM_CHANNELS 5 // 5DPRINT: 4     AZTEEG_X3_PRO: 8     MKS SBASE: 5
 // Actual motor currents in Amps. The number of entries must match DIGIPOT_I2C_NUM_CHANNELS.
 // These correspond to the physical drivers, so be mindful if the order is changed.
-#define DIGIPOT_I2C_MOTOR_CURRENTS { 1.2, 1.2, 1.2, 1.2, 1.2 }  //  MKS SBASE: 5
+// #define DIGIPOT_I2C_MOTOR_CURRENTS { 1.2, 1.2, 1.2, 1.2, 1.2 }  //  MKS SBASE: 5
 
 //===========================================================================
 //=============================Additional Features===========================
