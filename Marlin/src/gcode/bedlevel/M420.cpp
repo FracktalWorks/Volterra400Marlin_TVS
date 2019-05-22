@@ -233,7 +233,13 @@ void GcodeSuite::M420() {
 
   // Error if leveling failed to enable or reenable
   if (to_enable && !planner.leveling_active)
-    SERIAL_ERROR_MSG(MSG_ERR_M420_FAILED);
+    /* FRACKTAL WORKS: START */
+    // BED LEVELING
+    // show error as echo to prevent catch by Octoprint
+
+    // SERIAL_ERROR_MSG(MSG_ERR_M420_FAILED);
+    SERIAL_ECHOLNPGM(MSG_ERR_M420_FAILED);
+    /* FRACKTAL WORKS: END */
 
   SERIAL_ECHO_START();
   SERIAL_ECHOPGM("Bed Leveling ");
