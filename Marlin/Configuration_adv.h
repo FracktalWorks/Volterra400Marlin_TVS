@@ -62,6 +62,7 @@
   #define FW_BABYSTEP_LIMIT 1.0
 #endif
 
+#define M114_DETAIL
 
 // #define LIN_ADVANCE
 
