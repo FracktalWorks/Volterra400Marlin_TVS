@@ -43,8 +43,8 @@
 //
 // Servo pin
 //
-#define SERVO0_PIN         P1_23   // J8-3 (low jitter)
-#define SERVO1_PIN         P2_12   // J8-4
+#define SERVO0_PIN         P2_12   // J8-4
+#define SERVO1_PIN         P1_23   // J8-3 (low jitter)
 #define SERVO2_PIN         P2_11   // J8-5
 #define SERVO3_PIN         P4_28   // J8-6
 
@@ -90,18 +90,21 @@
 // 3.3V max when defined as an analog input
 //
 #define TEMP_BED_PIN        0   // A0 (TH1)
-#define TEMP_0_PIN          1   // A1 (TH2)
-#define TEMP_1_PIN          2   // A2 (TH3)
-#define TEMP_2_PIN          3   // A3 (TH4)
+#define TEMP_0_PIN          5   // P1_31 on EXP1
+#define TEMP_1_PIN          4   // P1_30 on EXP1
+#define TEMP_CHAMBER_PIN    1   // A1 (TH2)
+#define TEMP_FILBOX_PIN     2   // A2 (TH3)
+// #define TEMP_2_PIN          3   // A3 (TH4)
 
 //
 // Heaters / Fans
 //
-#define HEATER_BED_PIN     P2_05
-#define HEATER_0_PIN       P2_07
-#define HEATER_1_PIN       P2_06
+#define HEATER_BED_PIN      P2_05
+#define HEATER_0_PIN        P2_07
+#define HEATER_1_PIN        P2_06
+#define HEATER_CHAMBER_PIN  P0_18
 #ifndef FAN_PIN
-  #define FAN_PIN          P2_04
+  #define FAN_PIN           P2_04
 #endif
 
 //
