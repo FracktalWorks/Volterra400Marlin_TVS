@@ -191,7 +191,18 @@ G29_TYPE GcodeSuite::G29() {
               ;
 
   // Don't allow auto-leveling without homing first
-  if (axis_unhomed_error()) G29_RETURN(false);
+  /* FRACKTAL WORKS: START */
+  // LOAD CELL ABL
+  //    if (axis_unhomed_error()) G29_RETURN(false);
+  if (axis_unhomed_error()) {
+    SERIAL_ECHOLNPGM("> Not homed. Enqueueing G28 followed by G29");
+    enqueue_and_echo_commands_P(PSTR("G28\nG29"));
+    G29_RETURN(false);
+  } else {
+    do_blocking_move_to_xy(0, 0, MMM_TO_MMS(HOMING_FEEDRATE_XY));
+    do_blocking_move_to_z(10, MMM_TO_MMS(HOMING_FEEDRATE_Z));
+  }
+  /* FRACKTAL WORKS: END */
 
   if (!no_action && planner.leveling_active && parser.boolval('O')) { // Auto-level only if needed
     if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("> Auto-level not needed, skip\n<<< G29");
