@@ -796,6 +796,25 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
       #elif ENABLED(MAGNETIC_SWITCHING_TOOLHEAD) // Magnetic Switching Toolhead
         magnetic_switching_toolhead_tool_change(tmp_extruder, fr_mm_s, no_move);
       #elif ENABLED(SWITCHING_NOZZLE) && !SWITCHING_NOZZLE_TWO_SERVOS
+
+        /* FRACKTAL WORKS: START */
+        // Tool change prevent crash at HOME
+        const float tmp_z_move = current_position[Z_AXIS] + MAX(-zdiff, zdiff) + toolchange_settings.z_raise,
+                    tmp_x_move = current_position[X_AXIS] - xdiff;
+
+        const bool stop_z_crash = (tmp_z_move > Z_MAX_POS),
+                   stop_x_crash = (tmp_x_move < X_HOME_POS);
+
+        #if ENABLED(DEBUG_LEVELING_FEATURE)
+          if (DEBUGGING(LEVELING)) {
+            SERIAL_ECHOPAIR("FW: tmp_z_move=", tmp_z_move);
+            SERIAL_ECHOLNPAIR(", stop_z_crash=", stop_z_crash);
+            SERIAL_ECHOPAIR("FW: tmp_x_move=", tmp_x_move);
+            SERIAL_ECHOLNPAIR(", stop_x_crash=", stop_x_crash);
+          }
+        #endif
+        /* FRACKTAL WORKS: END */
+
         // Raise by a configured distance to avoid workpiece, except with
         // SWITCHING_NOZZLE_TWO_SERVOS, as both nozzles will lift instead.
         current_position[Z_AXIS] += MAX(-zdiff, 0.0) + toolchange_settings.z_raise;
@@ -803,6 +822,20 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
           NOMORE(current_position[Z_AXIS], soft_endstop[Z_AXIS].max);
         #endif
         if (!no_move) fast_line_to_current(Z_AXIS);
+
+        /* FRACKTAL WORKS: START */
+        // Tool change prevent crash at HOME
+        if (stop_z_crash) {
+          SERIAL_ECHOLNPAIR("FW: Changing current_position[Z_AXIS] to stop crash, current_position[Z_AXIS]=", current_position[Z_AXIS] - zdiff);
+          current_position[Z_AXIS] -= zdiff;
+        }
+
+        if (stop_x_crash) {
+          SERIAL_ECHOLNPAIR("FW: Changing destination[X_AXIS] to stop crash, destination[X_AXIS]=", destination[X_AXIS] + xdiff);
+          destination[X_AXIS] += xdiff;
+        }
+        /* FRACKTAL WORKS: END */
+
         move_nozzle_servo(tmp_extruder);
       #endif
 
