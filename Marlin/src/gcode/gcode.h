@@ -877,6 +877,14 @@ private:
     static void M1000();
   #endif
 
+
+/* FRACKTAL WORKS: START */
+// LPC1768 reset
+  #ifdef TARGET_LPC1768
+    static void M2122();
+  #endif
+/* FRACKTAL WORKS: END */
+
   static void T(const uint8_t tool_index);
 
 };

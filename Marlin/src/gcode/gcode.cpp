@@ -780,6 +780,13 @@ void GcodeSuite::process_parsed_command(
         case 1000: M1000(); break;                                // M1000: Resume from power-loss
       #endif
 
+      /* FRACKTAL WORKS: START */
+      // LPC1768 reset
+      #ifdef TARGET_LPC1768
+        case 2122: M2122(); break;                                // M2122: reset controller
+      #endif
+      /* FRACKTAL WORKS: END */
+
       default: parser.unknown_command_error(); break;
     }
     break;
