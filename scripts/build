@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# variant
+
+. ./scripts/constants
+
+if [ -z "${TRAVIS}" ] 
+then
+	echo "Fracktal Works Marlin 2.0 Build Generator"
+	echo " "
+	echo "Parameters:"
+	for i in "${!MACHINE_NAMES[@]}"; do 
+		echo "  $(( $i )): ${MACHINE_NAMES[$i]}"
+	done
+fi
+
+if [[ -z "$1" ]];	then
+	exit 1
+fi
+
+if [[ $1 -lt 0 || $1 -gt 2 ]]; then
+	echo "Invalid parameters"
+	exit 1
+fi
+
+echo "Selected variant: ${MACHINE_NAMES[$1]}"
+echo ""
+
+SHORT_VARIANT=${SHORT_VARIANTS[$1]}
+MACHINE_NAME=${MACHINE_NAMES[$1]}
+VARIANT=${VARIANTS[$1]}
+UUID=${UUIDS[$1]}
+
+TIMESTAMP=$(date '+%s')
+DISTDATE=$(date '+%Y-%m-%d %H:%M')
+DATE_STR=$(date '+%y%m%d_%H%M')
+SHORT_BUILD_VERSION=$(echo "${SHORT_VARIANT}")
+DETAILED_BUILD_VERSION=$(echo "${SHORT_BUILD_VERSION}_${DATE_STR}_HA")
+
+CWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="${CWD}/.."
+SRC="${ROOT}/Marlin"
+
+# _variant <dir> <variant>
+./scripts/_variant "${SRC}" "${VARIANT}"
+
+# _version <dir> <timestamp> <distdate> <sbv> <dbv> <machine_name>
+./scripts/_version "${SRC}" "${TIMESTAMP}" "${DISTDATE}" "${SHORT_BUILD_VERSION}" "${DETAILED_BUILD_VERSION}" "${MACHINE_NAME}" "${UUID}"

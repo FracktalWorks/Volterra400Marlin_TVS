@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+PROJECT_NAME="Volterra400Marlin"
+
+. constants
+
+# static paths
+SRC="${TRAVIS_BUILD_DIR}/Marlin"
+OUTPUT="${TRAVIS_BUILD_DIR}/output"
+BUILD_BIN="${TRAVIS_BUILD_DIR}/.pioenvs/LPC1768/firmware.bin"
+
+# dates
+TIMESTAMP=$(date '+%s')
+DISTDATE=$(date '+%Y-%m-%d %H:%M')
+DATE_STR=$(date '+%y%m%d_%H%M')
+
+# make output dir
+mkdir -p "${OUTPUT}"
+
+
+for (( i=0; i<=2; i++ )); do
+	SHORT_VARIANT=${SHORT_VARIANTS[${i}]}
+	MACHINE_NAME=${MACHINE_NAMES[${i}]}
+	VARIANT=${VARIANTS[${i}]}
+	UUID=${UUIDS[${i}]}
+
+	SHORT_BUILD_VERSION=$(echo "${SHORT_VARIANT}")
+	DETAILED_BUILD_VERSION=$(echo "${SHORT_BUILD_VERSION}_${DATE_STR}_HA")
+	
+	OUTPUT_BIN="${OUTPUT}/${SHORT_VARIANT}_firmware.bin"
+
+	specho 2 "Building ${MACHINE_NAME} (${VARIANT})"
+
+	# _variant <dir> <variant>
+	_variant "${SRC}" "${VARIANT}"
+
+	# _version <dir> <timestamp> <distdate> <sbv> <dbv> <machine_name>
+	_version "${SRC}" "${TIMESTAMP}" "${DISTDATE}" "${SHORT_BUILD_VERSION}" "${DETAILED_BUILD_VERSION}" "${MACHINE_NAME}" "${UUID}"
+
+
+	# compile INO
+	# eval "arduino --verify \"${STAGING_SUB_INO}\""
+	if ! platformio run --project-dir ${TRAVIS_BUILD_DIR} -e ${TEST_PLATFORM}; then
+		specho 1 "PlatformIO CLI build failed"
+		exit 1
+	fi
+
+	ls -al ${TRAVIS_BUILD_DIR}
+	ls -al ${TRAVIS_BUILD_DIR}/.pioenvs/
+	ls -al ${TRAVIS_BUILD_DIR}/.pioenvs/LPC1768/
+
+	# check for compiled hex
+	if [ -f "${BUILD_BIN}" ]; then
+		cp "${BUILD_BIN}" "${OUTPUT_BIN}"
+	fi
+done
+
+specho 2 "ls ${OUTPUT}"
+ls "${OUTPUT}"
+
+HEX_COUNT=$(find "${OUTPUT}"/ -maxdepth 1 -type f -name '*.bin' | wc -l)
+if [ $HEX_COUNT -eq 0 ]; then
+	specho 1 "Bin files not generated"
+	exit $HEX_COUNT
+fi
+
+specho 2 "Uploading to Firmware repo"
+REPO="Marlin200SbaseBin"
+GH_REPO="github.com/FracktalWorks/${REPO}.git"
+BRANCH="master"
+
+git clone -b ${BRANCH} git://${GH_REPO}
+# rm -f "${REPO}"/*.hex
+# _info <dir> <distdate>
+_info "${REPO}" "${DISTDATE}"
+mv -f "${OUTPUT}"/* ${REPO}
+cd ${REPO}
+git remote
+git config user.email ${GITHUB_EMAIL}
+git config user.name ${GITHUB_USER}
+git add .
+git commit -m "${TRAVIS_COMMIT}:- ${DISTDATE}" -m "${TRAVIS_COMMIT_MESSAGE}"
+git push "https://${GITHUB_TOKEN}@${GH_REPO}" ${BRANCH} # > /dev/null 2>&1
+
+
+specho 2 "Done!"
+
+# exit 0

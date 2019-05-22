@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+declare -a VARIANTS=(
+  "VOLTERRA_2019_400_S"
+  "VOLTERRA_2019_400_D"
+  "VOLTERRA_2019_400_HT"
+)
+
+declare -a SHORT_VARIANTS=(
+  "V194S"
+  "V194D"
+  "V194H"
+)
+
+declare -a MACHINE_NAMES=(
+  "Volterra Speed"
+  "Volterra Dual"
+  "Volterra High Temperature"
+)
+
+declare -a UUIDS=(
+  "94d4488c-5393-4463-be0e-0927dd92171f"
+  "63469876-5bb8-4bf1-8a67-e4b98805be65"
+  "68215e0a-92ac-4f6e-9924-72cfdbed33b6"
+)
