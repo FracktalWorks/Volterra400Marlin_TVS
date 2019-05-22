@@ -728,7 +728,14 @@ float probe_pt(const float &rx, const float &ry, const ProbePtRaise raise_after/
   if (isnan(measured_z)) {
     STOW_PROBE();
     LCD_MESSAGEPGM(MSG_ERR_PROBING_FAILED);
-    SERIAL_ERROR_MSG(MSG_ERR_PROBING_FAILED);
+
+    /* FRACKTAL WORKS: START */
+    // AUTO BED LEVELING
+    // echo probing failed instead of error to prevent Octoprint screwup
+    SERIAL_ECHOLNPGM("PROBING_FAILED");
+    // SERIAL_ERROR_MSG(MSG_ERR_PROBING_FAILED);
+    SERIAL_ECHOLNPGM(MSG_ERR_PROBING_FAILED);
+    /* FRACKTAL WORKS: END */
   }
 
   if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("<<< probe_pt");
