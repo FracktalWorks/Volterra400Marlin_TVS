@@ -64,6 +64,8 @@
 
 #define M114_DETAIL
 
+#define G29_RETRY_AND_RECOVER
+
 // #define LIN_ADVANCE
 
 //===========================================================================
