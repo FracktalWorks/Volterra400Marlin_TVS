@@ -10,13 +10,13 @@
 #include "./_FracktalWorks.h"
 
 #ifndef VARIANT
-#error "Variant not defined"
+  #error "Variant not defined"
 #endif
 
 /**  Bed dimensions  **/
-#define X_BED_SIZE 370
-#define Y_BED_SIZE 395
-#define Z_MAX_POS 400
+#define X_BED_SIZE  500
+#define Y_BED_SIZE  500
+#define Z_MAX_POS   390
 
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
@@ -24,18 +24,18 @@
 
 /**  Stepper  **/
 #if BV_DUAL_NOZZLE()
-#define INVERT_X_DIR false
-#define INVERT_Y_DIR false
-#define INVERT_Z_DIR false
+  #define INVERT_X_DIR true
+  #define INVERT_Y_DIR true
+  #define INVERT_Z_DIR true
 
-#define INVERT_E0_DIR true
-#define INVERT_E1_DIR false
+  #define INVERT_E0_DIR true
+  #define INVERT_E1_DIR false
 #else
-#define INVERT_X_DIR false
-#define INVERT_Y_DIR false
-#define INVERT_Z_DIR false
+  #define INVERT_X_DIR false
+  #define INVERT_Y_DIR false
+  #define INVERT_Z_DIR false
 
-#define INVERT_E0_DIR true
+  #define INVERT_E0_DIR true
 #endif
 
 // /**  Enstops  **/
@@ -49,9 +49,9 @@
 #define Z_HOME_DIR 1
 
 #if BV_DUAL_NOZZLE()
-#define MANUAL_X_HOME_POS -40 // (-1 * HOTEND_OFFSET_X[1])
-#define MANUAL_Y_HOME_POS Y_BED_SIZE
-#define MANUAL_Z_HOME_POS Z_MAX_POS
+  #define MANUAL_X_HOME_POS -40 // (-1 * HOTEND_OFFSET_X[1])
+  #define MANUAL_Y_HOME_POS Y_BED_SIZE
+  #define MANUAL_Z_HOME_POS Z_MAX_POS
 #endif
 
 #define HOMING_FEEDRATE_XY (50 * 60)
@@ -73,17 +73,17 @@
 #endif
 
 #if DISABLED(JUNCTION_DEVIATION)
-#define DEFAULT_XJERK 10.0
-#define DEFAULT_YJERK 10.0
-#define DEFAULT_ZJERK 0.4
+  #define DEFAULT_XJERK 10.0
+  #define DEFAULT_YJERK 10.0
+  #define DEFAULT_ZJERK 0.4
 #endif
 #define DEFAULT_EJERK 10.0
 
 /** Extruder Count **/
 #if BV_DUAL_NOZZLE()
-#define EXTRUDERS 2
+  #define EXTRUDERS 2
 #else
-#define EXTRUDERS 1
+  #define EXTRUDERS 1
 #endif
 
 /*** Dual Nozzle ***/
@@ -101,15 +101,15 @@
 #endif
 
 /**  Thermistor  **/
-#define TEMP_SENSOR_0 3
+#define TEMP_SENSOR_0       20
 #if BV_DUAL_NOZZLE()
-#define TEMP_SENSOR_1 3
+  #define TEMP_SENSOR_1     20
 #else
-#define TEMP_SENSOR_1 0
+  #define TEMP_SENSOR_1     0
 #endif
+#define TEMP_SENSOR_BED     3
 #define TEMP_SENSOR_CHAMBER 3
-// #define TEMP_SENSOR_FILBOX  5
-#define TEMP_SENSOR_BED 3
+#define TEMP_SENSOR_FILBOX  3
 
 /**  Thermal  **/
 #define TEMP_RESIDENCY_TIME 1
