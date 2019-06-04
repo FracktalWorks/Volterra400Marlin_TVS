@@ -238,6 +238,10 @@ hotend_info_t Temperature::temp_hotend[HOTENDS]; // = { 0 }
   #endif // HAS_HEATED_CHAMBER
 #endif // HAS_TEMP_CHAMBER
 
+#if HAS_TEMP_FILBOX
+  filbox_info_t Temperature::temp_filbox; // = { 0 }
+#endif // HAS_TEMP_FILBOX
+
 // Initialized by settings.load()
 #if ENABLED(PIDTEMP)
   //hotend_pid_t Temperature::pid[HOTENDS];
@@ -1448,6 +1452,18 @@ float Temperature::analog_to_celsius_hotend(const int raw, const uint8_t e) {
   }
 #endif // HAS_TEMP_CHAMBER
 
+#if HAS_TEMP_FILBOX
+  // Derived from RepRap FiveD extruder::getTemperature()
+  // For filament chamber temperature measurement.
+  float Temperature::analog_to_celsius_filbox(const int raw) {
+    #if ENABLED(HEATER_FILBOX_USES_THERMISTOR)
+      SCAN_THERMISTOR_TABLE(FILBOXTEMPTABLE, FILBOXTEMPTABLE_LEN);
+    #else
+      return 0;
+    #endif
+  }
+#endif // HAS_TEMP_FILBOX
+
 /**
  * Get the raw values into the actual temperatures.
  * The raw values are created in interrupt context,
@@ -1467,6 +1483,9 @@ void Temperature::updateTemperaturesFromRawValues() {
   #endif
   #if HAS_TEMP_CHAMBER
     temp_chamber.current = analog_to_celsius_chamber(temp_chamber.raw);
+  #endif
+  #if HAS_TEMP_FILBOX
+    temp_filbox.current = analog_to_celsius_filbox(temp_filbox.raw);
   #endif
   #if ENABLED(TEMP_SENSOR_1_AS_REDUNDANT)
     redundant_temperature = analog_to_celsius_hotend(redundant_temperature_raw, 1);
@@ -1641,6 +1660,9 @@ void Temperature::init() {
   #endif
   #if HAS_TEMP_CHAMBER
     HAL_ANALOG_SELECT(TEMP_CHAMBER_PIN);
+  #endif
+  #if HAS_TEMP_FILBOX
+    HAL_ANALOG_SELECT(TEMP_FILBOX_PIN);
   #endif
   #if ENABLED(FILAMENT_WIDTH_SENSOR)
     HAL_ANALOG_SELECT(FILWIDTH_PIN);
@@ -2146,6 +2168,10 @@ void Temperature::set_current_temp_raw() {
     temp_chamber.raw = temp_chamber.acc;
   #endif
 
+  #if HAS_TEMP_FILBOX
+    temp_filbox.raw = temp_filbox.acc;
+  #endif
+
   temp_meas_ready = true;
 }
 
@@ -2170,6 +2196,10 @@ void Temperature::readings_ready() {
 
   #if HAS_TEMP_CHAMBER
     temp_chamber.acc = 0;
+  #endif
+
+  #if HAS_TEMP_FILBOX
+    temp_filbox.acc = 0;
   #endif
 
   int constexpr temp_dir[] = {
@@ -2635,6 +2665,15 @@ void Temperature::isr() {
         break;
     #endif
 
+    #if HAS_TEMP_FILBOX
+      case PrepareTemp_FILBOX:
+        HAL_START_ADC(TEMP_FILBOX_PIN);
+        break;
+      case MeasureTemp_FILBOX:
+        ACCUMULATE_ADC(temp_filbox);
+        break;
+    #endif
+
     #if HAS_TEMP_ADC_1
       case PrepareTemp_1:
         HAL_START_ADC(TEMP_1_PIN);
@@ -2751,13 +2790,15 @@ void Temperature::isr() {
     #endif
     , const int8_t e=-3
   ) {
-    #if !(HAS_HEATED_BED && HAS_TEMP_HOTEND && HAS_TEMP_CHAMBER) && HOTENDS <= 1
+    #if !(HAS_HEATED_BED && HAS_TEMP_HOTEND && HAS_TEMP_CHAMBER && HAS_TEMP_FILBOX) && HOTENDS <= 1
       UNUSED(e);
     #endif
 
     SERIAL_CHAR(' ');
     SERIAL_CHAR(
-      #if HAS_TEMP_CHAMBER && HAS_HEATED_BED && HAS_TEMP_HOTEND
+      #if HAS_TEMP_FILBOX && HAS_TEMP_CHAMBER && HAS_HEATED_BED && HAS_TEMP_HOTEND
+        e == -10 ? 'F' : e == -2 ? 'C' : e == -1 ? 'B' : 'T'
+      #elif HAS_TEMP_CHAMBER && HAS_HEATED_BED && HAS_TEMP_HOTEND
         e == -2 ? 'C' : e == -1 ? 'B' : 'T'
       #elif HAS_HEATED_BED && HAS_TEMP_HOTEND
         e == -1 ? 'B' : 'T'
@@ -2809,6 +2850,14 @@ void Temperature::isr() {
         , -2 // CHAMBER
       );
     #endif // HAS_TEMP_CHAMBER
+    #if HAS_TEMP_FILBOX
+      print_heater_state(degFilbox(), 0
+        #if ENABLED(SHOW_TEMP_ADC_VALUES)
+          , rawFilboxTemp()
+        #endif
+        , -10 // FILBOX
+      );
+    #endif // HAS_TEMP_FILBOX
     #if HOTENDS > 1
       HOTEND_LOOP() print_heater_state(degHotend(e), degTargetHotend(e)
         #if ENABLED(SHOW_TEMP_ADC_VALUES)
@@ -3113,7 +3162,7 @@ void Temperature::isr() {
 
   #endif // HAS_HEATED_BED
 
-  #if 0 && HAS_HEATED_CHAMBER
+  #if HAS_HEATED_CHAMBER
 
     #ifndef MIN_COOLING_SLOPE_DEG_CHAMBER
       #define MIN_COOLING_SLOPE_DEG_CHAMBER 1.50

@@ -96,6 +96,10 @@ enum ADCSensorState : char {
     PrepareTemp_CHAMBER,
     MeasureTemp_CHAMBER,
   #endif
+  #if HAS_TEMP_FILBOX
+    PrepareTemp_FILBOX,
+    MeasureTemp_FILBOX,
+  #endif
   #if HAS_TEMP_ADC_1
     PrepareTemp_1,
     MeasureTemp_1,
@@ -184,6 +188,9 @@ struct PIDHeaterInfo : public HeaterInfo {
 #elif HAS_TEMP_CHAMBER
   typedef temp_info_t chamber_info_t;
 #endif
+#if HAS_TEMP_FILBOX
+  typedef temp_info_t filbox_info_t;
+#endif
 
 // Heater idle handling
 typedef struct {
@@ -269,6 +276,10 @@ class Temperature {
 
     #if HAS_TEMP_CHAMBER
       static chamber_info_t temp_chamber;
+    #endif
+
+    #if HAS_TEMP_FILBOX
+      static filbox_info_t temp_filbox;
     #endif
 
     #if ENABLED(AUTO_POWER_E_FANS)
@@ -450,6 +461,9 @@ class Temperature {
     #endif
     #if HAS_TEMP_CHAMBER
       static float analog_to_celsius_chamber(const int raw);
+    #endif
+    #if HAS_TEMP_FILBOX
+      static float analog_to_celsius_filbox(const int raw);
     #endif
 
     #if FAN_COUNT > 0
@@ -693,6 +707,13 @@ class Temperature {
         static bool wait_for_chamber(const bool no_wait_for_cooling=true);
       #endif
     #endif // HAS_TEMP_CHAMBER
+
+    #if HAS_TEMP_FILBOX
+      #if ENABLED(SHOW_TEMP_ADC_VALUES)
+        FORCE_INLINE static int16_t rawFilboxTemp()    { return temp_filbox.raw; }
+      #endif
+      FORCE_INLINE static float degFilbox()            { return temp_filbox.current; }
+    #endif // HAS_TEMP_FILBOX
 
     FORCE_INLINE static bool still_heating(const uint8_t e) {
       return degTargetHotend(e) > TEMP_HYSTERESIS && ABS(degHotend(e) - degTargetHotend(e)) > TEMP_HYSTERESIS;
