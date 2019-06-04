@@ -38,12 +38,14 @@
   #define INVERT_E0_DIR true
 #endif
 
-// /**  Enstops  **/
+/**  Enstops  **/
 #define USE_XMIN_PLUG
 #define USE_YMAX_PLUG
 #define USE_ZMAX_PLUG
 
-// /**  Homing  **/
+#define Z_MIN_PROBE_ENDSTOP_INVERTING true
+
+/**  Homing  **/
 #define X_HOME_DIR -1
 #define Y_HOME_DIR 1
 #define Z_HOME_DIR 1
@@ -121,7 +123,7 @@
 #define DEFAULT_Ki 5.14
 #define DEFAULT_Kd 89.73
 
-/**  Bed leveling  **/
+/**  Z probe  **/
 // #define Z_MIN_PROBE_ENDSTOP
 #define FIX_MOUNTED_PROBE
 #define Z_PROBE_OFFSET_FROM_EXTRUDER 0.2 // Z offset: -below +above  [the nozzle]
@@ -139,10 +141,11 @@
 
 #define Z_MIN_PROBE_REPEATABILITY_TEST
 
+/** Bed Leveling **/
 #define AUTO_BED_LEVELING_BILINEAR
 #define DEBUG_LEVELING_FEATURE
 
-// /**  Additional features  **/
+/**  Additional features  **/
 #define NOZZLE_PARK_FEATURE
 
 //===========================================================================
