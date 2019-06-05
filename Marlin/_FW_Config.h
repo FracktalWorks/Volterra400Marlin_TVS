@@ -14,8 +14,8 @@
 #endif
 
 /**  Bed dimensions  **/
-#define X_BED_SIZE  500
-#define Y_BED_SIZE  500
+#define X_BED_SIZE  410
+#define Y_BED_SIZE  420
 #define Z_MAX_POS   390
 
 #define X_MIN_POS 0
@@ -43,7 +43,7 @@
 #define USE_YMAX_PLUG
 #define USE_ZMAX_PLUG
 
-#define Z_MIN_PROBE_ENDSTOP_INVERTING true
+#define Z_MIN_PROBE_ENDSTOP_INVERTING false
 
 /**  Homing  **/
 #define X_HOME_DIR -1
@@ -60,8 +60,8 @@
 #define HOMING_FEEDRATE_Z (20 * 60)
 
 /**  Motion  **/
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 160, 160, 1007.874, 280}
-#define DEFAULT_MAX_FEEDRATE          {  200, 200, 20, 45 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 200, 200, 1007.874, 280}
+#define DEFAULT_MAX_FEEDRATE          { 200, 200, 20, 45 }
 #define DEFAULT_MAX_ACCELERATION      { 800, 800, 50, 10000 }
 
 #define DEFAULT_ACCELERATION 800          // X, Y, Z and E acceleration for printing moves
