@@ -14,9 +14,9 @@
 #endif
 
 /**  Bed dimensions  **/
-#define X_BED_SIZE  410
-#define Y_BED_SIZE  420
-#define Z_MAX_POS   390
+#define X_BED_SIZE  400
+#define Y_BED_SIZE  410
+#define Z_MAX_POS   395
 
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
@@ -51,7 +51,7 @@
 #define Z_HOME_DIR 1
 
 #if BV_DUAL_NOZZLE()
-  #define MANUAL_X_HOME_POS -40 // (-1 * HOTEND_OFFSET_X[1])
+  #define MANUAL_X_HOME_POS -50 // (-1 * HOTEND_OFFSET_X[1])
   #define MANUAL_Y_HOME_POS Y_BED_SIZE
   #define MANUAL_Z_HOME_POS Z_MAX_POS
 #endif
@@ -119,9 +119,9 @@
 #define TEMP_BED_RESIDENCY_TIME 2
 
 /**  PID temperature settings  **/
-#define DEFAULT_Kp 42.96
-#define DEFAULT_Ki 5.14
-#define DEFAULT_Kd 89.73
+#define DEFAULT_Kp 10.44  // 42.96
+#define DEFAULT_Ki  0.57  // 5.14
+#define DEFAULT_Kd 48.03  // 89.73
 
 /**  Z probe  **/
 // #define Z_MIN_PROBE_ENDSTOP
