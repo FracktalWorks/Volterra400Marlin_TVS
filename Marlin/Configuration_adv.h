@@ -44,7 +44,7 @@
 #define DEFAULT_STEPPER_DEACTIVE_TIME 0
 #define MINIMUM_STEPPER_DIR_DELAY     650
 #define MINIMUM_STEPPER_PULSE         4
-#define DIGIPOT_I2C_MOTOR_CURRENTS    { 1.4, 1.4, 1.4, 1.4, 1.4 }
+#define DIGIPOT_I2C_MOTOR_CURRENTS    { 1.6, 1.6, 1.6, 1.6, 1.6 }
 
 #define THERMAL_PROTECTION_PERIOD       80     // Seconds
 #define THERMAL_PROTECTION_HYSTERESIS   15     // Degrees Celsius
@@ -54,6 +54,12 @@
   #define THERMAL_PROTECTION_BED_PERIOD       40 // Seconds
   #define THERMAL_PROTECTION_BED_HYSTERESIS   15 // Degrees Celsius
   #define WATCH_BED_TEMP_PERIOD               100 // Seconds
+#endif
+
+#if ENABLED(THERMAL_PROTECTION_CHAMBER)
+  #define THERMAL_PROTECTION_CHAMBER_PERIOD     40  // Seconds
+  #define THERMAL_PROTECTION_CHAMBER_HYSTERESIS 15  // Degrees Celsius
+  #define WATCH_CHAMBER_TEMP_PERIOD             180 // Seconds
 #endif
 
 #define BABYSTEPPING
@@ -145,7 +151,7 @@
  */
 #if TEMP_SENSOR_CHAMBER
   #define CHAMBER_MINTEMP             5
-  #define CHAMBER_MAXTEMP            60
+  #define CHAMBER_MAXTEMP           100
   #define TEMP_CHAMBER_HYSTERESIS     1   // (°C) Temperature proximity considered "close enough" to the target
   //#define CHAMBER_LIMIT_SWITCHING
   //#define HEATER_CHAMBER_PIN       44   // Chamber heater on/off pin
@@ -218,13 +224,13 @@
  * Thermal Protection parameters for the heated chamber.
  */
 #if ENABLED(THERMAL_PROTECTION_CHAMBER)
-  #define THERMAL_PROTECTION_CHAMBER_PERIOD 20    // Seconds
-  #define THERMAL_PROTECTION_CHAMBER_HYSTERESIS 2 // Degrees Celsius
+  // #define THERMAL_PROTECTION_CHAMBER_PERIOD 20    // Seconds
+  // #define THERMAL_PROTECTION_CHAMBER_HYSTERESIS 2 // Degrees Celsius
 
   /**
    * Heated chamber watch settings (M141/M191).
    */
-  #define WATCH_CHAMBER_TEMP_PERIOD 60            // Seconds
+  // #define WATCH_CHAMBER_TEMP_PERIOD 60            // Seconds
   #define WATCH_CHAMBER_TEMP_INCREASE 2           // Degrees Celsius
 #endif
 
